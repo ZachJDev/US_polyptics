@@ -41,7 +41,7 @@ const findAndTweet = () => {
         return newTweet + "@"+ new Date(Date.now()).toLocaleString()
     }).catch(e => {
         console.log('failed... Trying again:')
-        if(Array.from(tweetIds.keys).length >= NUM_OF_TWEETS) throw new Error("Could not find new tweets")
+        if(Array.from(Object.keys(tweetIds)).length >= NUM_OF_TWEETS) throw new Error("Could not find new tweets")
         findAndTweet()
     })
 
