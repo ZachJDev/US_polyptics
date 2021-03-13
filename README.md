@@ -11,4 +11,6 @@ This bot searches for political tweets, parses their text, and replaces each nou
 
 Right now, there is no procedure to capture plural words, which I think is the biggest weakness of this bot.
 
+Some punctuation is not handled correctly. I haven't been able to isolate why or what inputs cause it, though.
+
 The code is ineffiencent and calls the Twitter API more than it needs to. Fixing that will be my first major rewrite of the bot.
