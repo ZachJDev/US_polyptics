@@ -8,7 +8,7 @@ const T = new Twit({
     access_token_secret: process.env.TWITTER_ACCESS_SECRET,
     timeout_ms: 60 * 1000
 })
-const NUM_OF_TWEETS = 5
+const NUM_OF_TWEETS = 15
 
 const ONE_MINUTE = 60 * 1000
 const ONE_HOUR = 60 * ONE_MINUTE
@@ -18,6 +18,7 @@ const tweetIds = {}
 const findAndTweet = () => {
     let newTweet = ''
     console.log("Tweeting...")
+
     T.get("search/tweets", {q: "politics", count: NUM_OF_TWEETS, result_type: "popular"}).then(data => {
         let tweet;
         for (let i = 0; i < NUM_OF_TWEETS; i++) { // loop over the
@@ -40,6 +41,7 @@ const findAndTweet = () => {
         return newTweet + "@"+ new Date(Date.now()).toLocaleString()
     }).catch(e => {
         console.log('failed... Trying again:')
+        if(Array.from(tweetIds.keys >= NUM_OF_TWEETS)) throw new Error("Could not find new tweets")
         findAndTweet()
     })
 
