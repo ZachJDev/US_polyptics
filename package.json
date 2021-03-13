@@ -1,0 +1,17 @@
+{
+  "dependencies": {
+    "express": "^4.17.1",
+    "node-fetch": "^2.6.1",
+    "twit": "^2.2.11"
+  },
+  "name": "nplusn-generator",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev-run": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}

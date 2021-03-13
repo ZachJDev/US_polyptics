@@ -1,0 +1,1 @@
+module.exports = splitWords = (words) => words.split(' ');
