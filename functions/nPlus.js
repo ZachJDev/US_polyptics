@@ -7,6 +7,8 @@ module.exports = nPlus = (string, shift) => {
 
     const words = queryString.split(' ')
 
+
+
     // Call the getNewNoun function on all the words.
     const newWords = words.map((str, i) => getNewNouns(str, words[i - 1], shiftVal));
 

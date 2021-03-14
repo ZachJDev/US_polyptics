@@ -19,7 +19,7 @@ const findAndTweet = () => {
     let newTweet = ''
     console.log("Tweeting...")
 
-    T.get("search/tweets", {q: "politics", count: NUM_OF_TWEETS, result_type: "popular"}).then(data => {
+    T.get("search/tweets", {q: "US politics", count: NUM_OF_TWEETS, result_type: "popular"}).then(data => {
         let tweet;
         for (let i = 0; i < NUM_OF_TWEETS; i++) { // loop over the
             const {statuses} = data.data
