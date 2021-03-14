@@ -6,7 +6,7 @@ const matchCase = require('./matchCase')
 const {httpRegExp} = require('../regExp/regExps')
 
 module.exports = getNewNoun = (str, prevWord, shiftVal) => {
-    if(httpRegExp.test(str)) return;
+    if(httpRegExp.test(str)) return '';
     let [word, surrounding] = extractWord(str) // extract the word from any surrounding quotation marks.
     let finalWord = switchIfInList(word.toLowerCase(), shiftVal) // returns a new noun (if in the list) or the word itself.
     finalWord = isProbablyNotANoun(prevWord) ? word : finalWord // Reverts finalWord to the original word if it's probably not a noun.
