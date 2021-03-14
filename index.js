@@ -10,46 +10,50 @@ const T = new Twit({
 })
 const NUM_OF_TWEETS = 15
 
-const ONE_MINUTE = 60 * 1000
-const ONE_HOUR = 60 * ONE_MINUTE
-const tweetIds = {}
 
-
-const findAndTweet = () => {
-    let newTweet = ''
-    console.log("Tweeting...")
-
-    T.get("search/tweets", {q: "US politics", count: NUM_OF_TWEETS, result_type: "popular"}).then(data => {
-        let tweet;
-        for (let i = 0; i < NUM_OF_TWEETS; i++) { // loop over the
-            const {statuses} = data.data
-            const tweetData = statuses[i]
-            tweet = tweetData.quoted_status_id_str || tweetData.in_reply_to_status_id_str || tweetData.id_str
-            if (!tweetIds[tweet]) {
-                tweetIds[tweet] = true;
-                break
-            }
-        }
-        return T.get("statuses/show", {id: tweet, tweet_mode: "extended"})
-    }).then(data => {
-        const tweetText = data.data.full_text
-        newTweet = nPlus(tweetText, 7)
-        console.log(newTweet)
-        return T.post('statuses/update', {status: newTweet})
-
-    }).then(postedTweet => {
-        return newTweet + "@"+ new Date(Date.now()).toLocaleString()
-    }).catch(e => {
-        console.log('failed... Trying again:')
-        if(Array.from(Object.keys(tweetIds)).length >= NUM_OF_TWEETS) throw new Error("Could not find new tweets")
-        findAndTweet()
+async function findTweets() {
+    let data = await T.get("search/tweets", {
+        q: "US politics",
+        lang: "en",
+        count: NUM_OF_TWEETS,
+        result_type: "popular"
     })
-
+    return data.data.statuses
+}
+async function getTweetText(id) {
+    const tweet = await T.get("statuses/show", {id: id, tweet_mode: "extended"})
+    return tweet.data.full_text
+}
+async function makeNewTweet(text) {
+   return await T.post('statuses/update', {status: text})
 }
 
-console.log(findAndTweet());
+
+const findAndTweet = async () => {
+
+    let statuses = await findTweets();
+    let newTweet = ''
+    console.log("Tweeting...")
+    for (let status of statuses) {
+        try {
+            let tweetId = status.in_reply_to_status_id_str || status.id_str
+            console.log(`trying ${tweetId}`)
+            const tweetText = await getTweetText(tweetId)
+            console.log(tweetText)
+            const newTweet = nPlus(tweetText, 7)
+            await makeNewTweet(newTweet)
+            break
+        } catch (e) {
+            console.log(e.allErrors[0].message)
+            console.log("failed, Trying again...")
+            continue
+        }
 
 
+    }
+}
+
+findAndTweet();
 
 
 
